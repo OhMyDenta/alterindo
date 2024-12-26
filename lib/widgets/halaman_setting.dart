@@ -106,7 +106,6 @@ class _HalamanSettingState extends State<HalamanSetting> {
                               ),
                       ),
                     ),
-                    
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Column(
@@ -121,11 +120,12 @@ class _HalamanSettingState extends State<HalamanSetting> {
                     IconButton(
                       onPressed: () {
                         delPref();
-                        Navigator.pushReplacement(
+                        Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const LoginScreen(),
                           ),
+                          (Route<dynamic> route) => false,
                         );
                       },
                       icon: const Icon(
@@ -143,9 +143,9 @@ class _HalamanSettingState extends State<HalamanSetting> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context){ return ProfilePages(nip: widget.nip);}
-                    ),
+                    MaterialPageRoute(builder: (BuildContext context) {
+                      return ProfilePages(nip: widget.nip);
+                    }),
                   );
                 },
                 child: Container(

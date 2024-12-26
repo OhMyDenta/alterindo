@@ -54,14 +54,12 @@ class _KalendarState extends State<Kalendar> {
     return absensiData;
   }
 
-//
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
           color: Colors.white,
-          // border: Border.all(color: Colors.black, width: 1),
           borderRadius: BorderRadius.circular(14),
           boxShadow: const [
             BoxShadow(color: Colors.grey, spreadRadius: 0.001, blurRadius: 5),
@@ -97,7 +95,7 @@ class _KalendarState extends State<Kalendar> {
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(child: Text('Tidak ada data absensi.'));
                   }
-                        
+
                   final absensiData = snapshot.data!;
                   return SizedBox(
                     height: 400,
@@ -130,38 +128,49 @@ class _KalendarState extends State<Kalendar> {
                                   },
                                 ),
                               ),
-                              // titlesData: FlTitlesData(
-                              //   // leftTitles: const AxisTitles(
-                              //   //   sideTitles: SideTitles(
-                              //   //     showTitles: true,
-                              //   //     interval: 5,
-                              //   //     reservedSize: 30,
-                              //   //   ),
-                              //   // ),
-                              //   // bottomTitles: AxisTitles(
-                              //   //   sideTitles: SideTitles(
-                              //   //     showTitles: true,
-                              //   //     getTitlesWidget: (value, meta) {
-                              //   //       final months = absensiData.keys.toList();
-                              //   //       if (value < 0 || value >= months.length)
-                              //   //         return const Text('');
-                              //   //       return Padding(
-                              //   //         padding: const EdgeInsets.symmetric(
-                              //   //             vertical: 8.0),
-                              //   //         child: Text(
-                              //   //           months[value.toInt()],
-                              //   //           style: const TextStyle(fontSize: 12),
-                              //   //         ),
-                              //   //       );
-                              //   //     },
-                              //   //   ),
-                              //   // ),
-                              // ),
+                              titlesData: FlTitlesData(
+                                leftTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    interval: 5,
+                                    reservedSize: 40,
+                                    getTitlesWidget: (value, meta) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(right: 8.0),
+                                        child: Text(
+                                          value.toInt().toString(),
+                                          style: const TextStyle(fontSize: 12),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                bottomTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    getTitlesWidget: (value, meta) {
+                                      final months = absensiData.keys.toList();
+                                      if (value < 1 || value > months.length) {
+                                        return const Text('');
+                                      }
+                                      return Padding(
+                                        padding: const EdgeInsets.only(top: 8.0),
+                                        child: Text(
+                                          months[value.toInt() - 1],
+                                          style: const TextStyle(fontSize: 12),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
                               barGroups: _generateBarGroups(absensiData),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 40,)
+                        const SizedBox(
+                          height: 40,
+                        )
                       ],
                     ),
                   );
@@ -177,7 +186,6 @@ class _KalendarState extends State<Kalendar> {
   List<BarChartGroupData> _generateBarGroups(Map<String, int> absensiData) {
     final List<BarChartGroupData> barGroups = [];
     int index = 1;
-
     absensiData.forEach((month, count) {
       barGroups.add(
         BarChartGroupData(
@@ -187,13 +195,13 @@ class _KalendarState extends State<Kalendar> {
               toY: count.toDouble(),
               color: Colors.blue,
               width: 16,
+              borderRadius: BorderRadius.circular(6),
             ),
           ],
         ),
       );
       index++;
     });
-
     return barGroups;
   }
 }
