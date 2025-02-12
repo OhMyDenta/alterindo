@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:alterindo/widgets/login_screen.dart';
@@ -31,10 +33,10 @@ class _HomePagesState extends State<HomePages> {
 
       final response = await http.get(
         Uri.parse(
-          'https://alterindo.com/hris/api.php?action=data_karyawan&id=${widget.nip}',
+          'https://www.mydeveloper.pro/hris/api.php?action=data_karyawan&id=${widget.nip}',
         ),
         headers: {
-          'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+          'Authorization': 'Bearer 123456789',
         },
       );
       if (response.statusCode == 200) {
@@ -54,7 +56,7 @@ Future<void> checkLoginStatus() async {
   if (!status) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
   }
 }
@@ -205,7 +207,7 @@ Future<void> checkLoginStatus() async {
                     ),
                   ],
                 ),
-                TimePages(),
+                TimePages(nip: widget.nip,),
               ],
             ),
           ), //padding batas

@@ -1,4 +1,4 @@
-// ignore_for_file: sized_box_for_whitespace
+// ignore_for_file: sized_box_for_whitespace, avoid_print
 
 import 'dart:async';
 import 'dart:convert';
@@ -122,11 +122,11 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
 
   // /////////////////////////////////////      //////////////////////////          /////
   Future<List<History>> fetchHistoryData() async {
-  final url = 'https://alterindo.com/hris/api.php?action=data_absen_history&id=${widget.nip}&TanggalAwal=${DateFormat('yyyy-MM-dd').format(secondDate)}&TanggalAkhir=${DateFormat('yyyy-MM-dd').format(lastDate)}&status=$status';
+  final url = 'https://www.mydeveloper.pro/hris/api.php?action=data_absen_history&id=${widget.nip}&TanggalAwal=${DateFormat('yyyy-MM-dd').format(secondDate)}&TanggalAkhir=${DateFormat('yyyy-MM-dd').format(lastDate)}&status=$status';
 
   try {
     final response = await http.get(Uri.parse(url), headers: {
-      'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+      'Authorization': 'Bearer 123456789',
     });
 
     if (response.statusCode == 200) {

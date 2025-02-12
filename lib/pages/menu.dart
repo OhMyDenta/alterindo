@@ -27,10 +27,10 @@ class _MenuPagesState extends State<MenuPages> {
     try {
       final response = await http.get(
         Uri.parse(
-          'https://alterindo.com/hris/api.php?action=data_karyawan&id=${widget.nip}',
+          'https://www.mydeveloper.pro/hris/api.php?action=data_karyawan&id=${widget.nip}',
         ),
         headers: {
-          'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+          'Authorization': 'Bearer 123456789',
         },
       );
       if (response.statusCode == 200) {

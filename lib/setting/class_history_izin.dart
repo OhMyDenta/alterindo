@@ -1,4 +1,5 @@
 class HistoryIzin {
+  final String id;
   final String tanggal;
   final String jenis;
   final String keterangan;
@@ -11,6 +12,7 @@ class HistoryIzin {
   final String jenisIzin;
   
   HistoryIzin({
+    required this.id,
     required this.tanggal,
     required this.jenis,
     required this.keterangan,
@@ -25,6 +27,7 @@ class HistoryIzin {
 
   factory HistoryIzin.fromJson(Map<String, dynamic> json) {
     return HistoryIzin(
+      id: json['Id'].toString(),
       tanggal: json['Tanggal'] ?? '',
       jenis: json['Jenis'] ?? '',
       keterangan: json['Keterangan'] ?? '',

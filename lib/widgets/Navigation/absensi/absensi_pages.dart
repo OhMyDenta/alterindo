@@ -14,7 +14,7 @@ import 'package:timezone/timezone.dart' as tz;
 class AbsensiPages extends StatefulWidget {
   final String nip;
   final String device;
-  const AbsensiPages({super.key, required this.nip, required this.device});
+  const AbsensiPages({super.key, required this.nip, required this.device,});
 
   @override
   State<AbsensiPages> createState() => _AbsensiPagesState();
@@ -44,7 +44,9 @@ class _AbsensiPagesState extends State<AbsensiPages> {
   void initState() {
     super.initState();
     _updateDate();
-    Timer.periodic(const Duration(seconds: 1), (Timer t) => _updateDate());
+    fetchShiftData();
+    fetchAbsensData();
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => _updateDate());
   }
   @override
   void dispose(){
@@ -100,11 +102,11 @@ class _AbsensiPagesState extends State<AbsensiPages> {
     "Device": widget.device,
   };
   final uri =
-      Uri.parse('https://alterindo.com/hris/api.php?action=insert_absen');
+      Uri.parse('https://www.mydeveloper.pro/hris/api.php?action=insert_absen');
   final response = await http.post(
     uri,
     body: jsonEncode(body),
-    headers: {'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g'},
+    headers: {'Authorization': 'Bearer 123456789'},
   );
 
   final responseData = jsonDecode(response.body);
@@ -112,12 +114,12 @@ class _AbsensiPagesState extends State<AbsensiPages> {
     final message = responseData['message'];
     if (message == 'Absen Berhasil') {
       setState(() {
-        _absenTimeMasuk = time; // Set waktu absen masuk
+        _absenTimeMasuk = time; 
       });
       _showAbsenSuccessPopup(time, shift);
     } else if (message == 'Absen Pulang Berhasil') {
       setState(() {
-        _absenTimePulang = time; // Set waktu absen pulang
+        _absenTimePulang = time; 
       });
       _showAbsenSuccessPopup(time, shift);
     } else if (message == 'Anda Sudah Absen') {
@@ -134,8 +136,8 @@ class _AbsensiPagesState extends State<AbsensiPages> {
   void fetchAbsensData() async {
   final response = await http.get(
     Uri.parse(
-        'https://alterindo.com/hris/api.php?action=data_absen&id=${widget.nip}'),
-    headers: {'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g'},
+        'https://www.mydeveloper.pro/hris/api.php?action=data_absen&id=${widget.nip}'),
+    headers: {'Authorization': 'Bearer 123456789'},
   );
   if (response.statusCode == 200) {
     final Map<String, dynamic> json = jsonDecode(response.body);
@@ -143,6 +145,7 @@ class _AbsensiPagesState extends State<AbsensiPages> {
       _absenTimeMasuk = json['JamMasuk'] ?? '--:--:--';
       _absenTimePulang = json['JamPulang'] ?? '--:--:--';
       _lateDuration = json['Terlambat'] ?? '';
+
     });
   } else {
     throw Exception('Failed to load user data');
@@ -152,8 +155,8 @@ class _AbsensiPagesState extends State<AbsensiPages> {
   fetchShiftData() async {
     final response = await http.get(
       Uri.parse(
-          'https://alterindo.com/hris/api.php?action=data_shift&id=${widget.nip}'),
-      headers: {'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g'},
+          'https://www.mydeveloper.pro/hris/api.php?action=data_shift&id=${widget.nip}'),
+      headers: {'Authorization': 'Bearer 123456789'},
     );
     if (response.statusCode == 200) {
       final Map<String, dynamic> json = jsonDecode(response.body);

@@ -44,9 +44,9 @@ class _LoginScreenState extends State<LoginScreen> {
   void login(String nipInput, String kodeAktivasi) async {
     final response = await http.post(
       Uri.parse(
-        'https://alterindo.com/hris/api.php?action=login',
+        'https://www.mydeveloper.pro/hris/api.php?action=login',
       ),
-      headers: {'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g'},
+      headers: {'Authorization': 'Bearer 123456789'},
       body: jsonEncode({
         'NIP': nipInput,
         'KodeAktivasi': kodeAktivasi,

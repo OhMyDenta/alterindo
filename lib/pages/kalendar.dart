@@ -30,16 +30,16 @@ class _KalendarState extends State<Kalendar> {
     final sixMonthsAgo = DateTime(now.year, now.month - 5, 1);
     final Map<String, int> absensiData = {};
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 8; i++) {
       final currentMonth =
           DateTime(sixMonthsAgo.year, sixMonthsAgo.month + i, 1);
       final formattedMonth = DateFormat('yyyy-MM').format(currentMonth);
 
       final response = await http.get(
         Uri.parse(
-            'https://alterindo.com/hris/api.php?action=data_absen_history&id=${widget.nip}&TanggalAwal=$formattedMonth-01&TanggalAkhir=$formattedMonth-31'),
+            'https://www.mydeveloper.pro/hris/api.php?action=data_absen_history&id=${widget.nip}&TanggalAwal=$formattedMonth-01&TanggalAkhir=$formattedMonth-31'),
         headers: {
-          'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+          'Authorization': 'Bearer 123456789',
         },
       );
 

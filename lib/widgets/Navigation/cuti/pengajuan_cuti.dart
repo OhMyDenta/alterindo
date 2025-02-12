@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'dart:convert';
 import 'dart:developer';
@@ -56,10 +56,10 @@ class _PengajuanCutiState extends State<PengajuanCuti> {
   void fetchUserData() async {
     final response = await http.get(
       Uri.parse(
-        'https://alterindo.com/hris/api.php?action=login&id=${widget.nip}',
+        'https://www.mydeveloper.pro/hris/api.php?action=login&id=${widget.nip}',
       ),
       headers: {
-        'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+        'Authorization': 'Bearer 123456789',
       },
     );
     print('Status Code: ${response.statusCode}');
@@ -82,10 +82,10 @@ class _PengajuanCutiState extends State<PengajuanCuti> {
   Future<List<Pengajuan>> fetchHistoryData() async {
     final response = await http.get(
       Uri.parse(
-        'https://alterindo.com/hris/api.php?action=data_cuti',
+        'https://www.mydeveloper.pro/hris/api.php?action=data_cuti',
       ),
       headers: {
-        'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+        'Authorization': 'Bearer 123456789',
       },
     );
     if (response.statusCode == 200) {
@@ -205,7 +205,7 @@ class _PengajuanCutiState extends State<PengajuanCuti> {
                         child: Center(
                           child: Text(
                             'TIDAK',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
                             ),
                           ),
@@ -360,11 +360,11 @@ class _PengajuanCutiState extends State<PengajuanCuti> {
       });
 
       final response = await Dio().post(
-        'https://alterindo.com/hris/api.php?action=insert_cuti',
+        'https://www.mydeveloper.pro/hris/api.php?action=insert_cuti',
         data: formData,
         options: Options(
           headers: {
-            'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+            'Authorization': 'Bearer 123456789',
           },
         ),
       );
@@ -574,10 +574,10 @@ Response Body: ${response.data}''');
   void fetchSisaCuti() async {
     final response = await http.get(
       Uri.parse(
-        'https://alterindo.com/hris/api.php?action=sisa_cuti&id=${widget.nip}',
+        'https://www.mydeveloper.pro/hris/api.php?action=sisa_cuti&id=${widget.nip}',
       ),
       headers: {
-        'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+        'Authorization': 'Bearer 123456789',
       },
     );
     if (response.statusCode == 200) {

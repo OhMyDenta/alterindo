@@ -703,10 +703,10 @@ class _HistoryCutiPagesState extends State<HistoryCutiPages> {
   void fetchUserData() async {
     final response = await http.get(
       Uri.parse(
-        'https://alterindo.com/hris/api.php?action=login&id=${widget.nip}',
+        'https://www.mydeveloper.pro/hris/api.php?action=login&id=${widget.nip}',
       ),
       headers: {
-        'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+        'Authorization': 'Bearer 123456789',
       },
     );
     if (response.statusCode == 200) {
@@ -723,10 +723,10 @@ class _HistoryCutiPagesState extends State<HistoryCutiPages> {
   Future<List<HistoryCuti>> fetchHistoryData() async {
     final response = await http.get(
       Uri.parse(
-        'https://alterindo.com/hris/api.php?action=data_pengajuan_cuti&Kode=${widget.nip}&TanggalAwal=${DateFormat('yyyy-MM-dd').format(startDate)}&TanggalAkhir=${DateFormat('yyyy-MM-dd').format(endDate)}',
+        'https://www.mydeveloper.pro/hris/api.php?action=data_pengajuan_cuti&Kode=${widget.nip}&TanggalAwal=${DateFormat('yyyy-MM-dd').format(startDate)}&TanggalAkhir=${DateFormat('yyyy-MM-dd').format(endDate)}',
       ),
       headers: {
-        'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+        'Authorization': 'Bearer 123456789',
       },
     );
     if (response.statusCode == 200) {

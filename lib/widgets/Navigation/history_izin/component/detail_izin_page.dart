@@ -35,9 +35,11 @@ class DetailIzinPage extends StatefulWidget {
 }
 
 class _DetailIzinPageState extends State<DetailIzinPage> {
+
   bool selected = false;
   bool photoS = false;
   bool showPdf = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,7 @@ class _DetailIzinPageState extends State<DetailIzinPage> {
             style: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
           ),
+          
           centerTitle: true,
         ),
         body: Padding(
@@ -256,7 +259,7 @@ class _DetailIzinPageState extends State<DetailIzinPage> {
                               const SizedBox(height: 7),
                               Text(
                                 widget.uraian,
-                                style: const TextStyle(fontSize: 12),
+                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                               ),
                             ],
                           ),
@@ -434,6 +437,12 @@ class _DetailIzinPageState extends State<DetailIzinPage> {
                             ],
                           ),
                           // //////////////////////////// Lampanr kumorunokarukari
+                          
+  //                         if (widget.otorisasi == 0) // Jika status Pending, tampilkan tombol
+  // IconButton(
+  //   icon: const Icon(Icons.delete, color: Colors.red),
+  //   onPressed: () => _confirmDelete(context, widget.kode),
+  // ),
 
                           const SizedBox(height: 8),
                         ],

@@ -38,12 +38,12 @@ class _PdfState extends State<Pdf> {
         future: _getPdfBytes(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             log('Error: ${snapshot.error}');
-            return Center(child: Text('Error loading PDF'));
+            return const Center(child: Text('Error loading PDF'));
           } else if (!snapshot.hasData || snapshot.data == null) {
-            return Center(child: Text('No PDF data available'));
+            return const Center(child: Text('No PDF data available'));
           } else {
             final pdfBytes = snapshot.data!;
             return PDFView(

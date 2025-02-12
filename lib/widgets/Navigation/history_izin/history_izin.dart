@@ -1,9 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 import '../../../component/color.dart';
 import '../../../setting/class_history_izin.dart';
@@ -110,8 +112,8 @@ class _HistoryIzinPagesState extends State<HistoryIzinPages> {
                                   Text(
                                     startDate != null
                                         ? 'Pick Date'
-                                        :DateFormat('dd-MM-yyyy')
-                                            .format(startDate) ,
+                                        : DateFormat('dd-MM-yyyy')
+                                            .format(startDate),
                                     style: const TextStyle(
                                         fontSize: 16, color: Colors.grey),
                                   ),
@@ -145,8 +147,8 @@ class _HistoryIzinPagesState extends State<HistoryIzinPages> {
                                 children: [
                                   Text(
                                     endDate != null
-                                        ?  'Pick Date'
-                                        :DateFormat('dd-MM-yyyy')
+                                        ? 'Pick Date'
+                                        : DateFormat('dd-MM-yyyy')
                                             .format(endDate),
                                     style: const TextStyle(
                                         fontSize: 16, color: Colors.grey),
@@ -351,7 +353,8 @@ class _HistoryIzinPagesState extends State<HistoryIzinPages> {
                                 onTap: () {
                                   setState(() {
                                     _selectedOption = '60 Hari Terakhir';
-                                    startDate = DateTime.now().subtract(const Duration(days: 60));
+                                    startDate = DateTime.now()
+                                        .subtract(const Duration(days: 60));
                                     endDate = DateTime.now();
                                   });
                                   Navigator.pop(context);
@@ -698,13 +701,14 @@ class _HistoryIzinPagesState extends State<HistoryIzinPages> {
     setState(() {}); // Memperbarui tampilan.
   }
 
+// user data personal
   void fetchUserData() async {
     final response = await http.get(
       Uri.parse(
-        'https://alterindo.com/hris/api.php?action=login&id=${widget.nip}',
+        'https://www.mydeveloper.pro/hris/api.php?action=login&id=${widget.nip}',
       ),
       headers: {
-        'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+        'Authorization': 'Bearer 123456789',
       },
     );
     if (response.statusCode == 200) {
@@ -718,13 +722,14 @@ class _HistoryIzinPagesState extends State<HistoryIzinPages> {
     }
   }
 
+// history data personal
   Future<List<HistoryIzin>> fetchHistoryData() async {
     final response = await http.get(
       Uri.parse(
-        'https://alterindo.com/hris/api.php?action=data_pengajuan_izin&Kode=${widget.nip}&TanggalAwal=${DateFormat('yyyy-MM-dd').format(startDate)}&TanggalAkhir=${DateFormat('yyyy-MM-dd').format(endDate)}',
+        'https://www.mydeveloper.pro/hris/api.php?action=data_pengajuan_izin&Kode=${widget.nip}&TanggalAwal=${DateFormat('yyyy-MM-dd').format(startDate)}&TanggalAkhir=${DateFormat('yyyy-MM-dd').format(endDate)}',
       ),
       headers: {
-        'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+        'Authorization': 'Bearer 123456789',
       },
     );
     if (response.statusCode == 200) {
@@ -737,12 +742,78 @@ class _HistoryIzinPagesState extends State<HistoryIzinPages> {
     }
   }
 
+  void _confirmDelete(BuildContext context, ) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text("Konfirmasi"),
+      content: const Text("Apakah Anda yakin ingin menghapus pengajuan ini?"),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text("Batal"),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+            _deleteIzin();
+          },
+          child: const Text("Hapus", style: TextStyle(color: Colors.red)),
+        ),
+      ],
+    ),
+  );
+}
+
+Future<void> _deleteIzin() async {
+  final response = await http.delete(
+    Uri.parse('https://www.mydeveloper.pro/hris/api.php?action=delete_izin&Kode=${widget.nip}'),
+    headers: {
+      'Authorization': 'Bearer 123456789'
+    },
+  );
+  if (response.statusCode == 200) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Pengajuan izin berhasil dihapus")),
+    );
+    setState(() {
+      dataHistoryIzin = fetchHistoryData();
+    });
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Gagal menghapus pengajuan izin")),
+    );
+  }
+}
+
+  // Future<void> deleteIzin(String id) async {
+  //   final response = await http.delete(
+  //     Uri.parse('https://www.mydeveloper.pro/hris/api.php?action=data_pengajuan_izin'),
+  //     headers: {'Authorization': 'Bearer 123456789'},
+  //     body: {'id': id},
+  //   );
+
+  //   if (response.statusCode == 200) {
+  //     setState(() {
+  //       dataHistoryIzin =
+  //           fetchHistoryData(); 
+  //     });
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text("Data berhasil dihapus")),
+  //     );
+  //   } else {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text("Gagal menghapus data")),
+  //     );
+  //   }
+  // }
+
   @override
   void initState() {
     super.initState();
     getFirstDate();
     fetchUserData();
-    
+
     dataHistoryIzin = fetchHistoryData();
   }
 
@@ -863,6 +934,11 @@ class _HistoryIzinPagesState extends State<HistoryIzinPages> {
                               foto: data.foto,
                               dokumen: data.dokumen,
                               nama: nama,
+                              id: data.id,
+                              nip: widget.nip,
+                              onDelete: () {
+                                _confirmDelete(context);
+                              },
                             ),
                           ),
                         );
@@ -877,7 +953,6 @@ class _HistoryIzinPagesState extends State<HistoryIzinPages> {
               ),
             ),
           ),
-        
         ],
       ),
     );

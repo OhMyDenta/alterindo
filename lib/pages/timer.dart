@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../component/color.dart';
+import 'absen_today.dart';
 
 class TimePages extends StatefulWidget {
-  const TimePages({super.key});
+  final String nip;
+  const TimePages({super.key, required this.nip});
 
   @override
   State<TimePages> createState() => _TimePagesState();
@@ -76,106 +78,7 @@ class _TimePagesState extends State<TimePages> {
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      // height: 60,
-                      // width: 60,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 30,
-                              width: 30,
-                              decoration: const BoxDecoration(
-                                  color: AppColors.three,
-                                  shape: BoxShape.circle),
-                              child: const Icon(
-                                Icons.login,
-                                size: 20,
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 2.0, horizontal: 8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Absend Datang'),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '--:--:--',
-                                        style: TextStyle(
-                                          color: AppColors.three,
-                                        ),
-                                      ),
-                                      SizedBox(width: 3),
-                                      Text('WIB')
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      // height: 60,
-                      // width: 60,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 30,
-                              width: 30,
-                              decoration: const BoxDecoration(
-                                  color: AppColors.threeorange,
-                                  shape: BoxShape.circle),
-                              child: const Icon(
-                                Icons.logout,
-                                size: 20,
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 2.0, horizontal: 8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Absend Pulang'),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '--:--:--',
-                                        style: TextStyle(
-                                          color: AppColors.three,
-                                        ),
-                                      ),
-                                      SizedBox(width: 3),
-                                      Text('WIB')
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  AbsenToday(nip: widget.nip,)
                 ],
               ),
             ],

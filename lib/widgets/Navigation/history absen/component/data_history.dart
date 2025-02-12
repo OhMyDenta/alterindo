@@ -119,7 +119,7 @@ class _DataHistoryState extends State<DataHistory> {
                             // menu masuk
                             Container(
                               decoration: BoxDecoration(
-                                  boxShadow: [BoxShadow(color:Colors.black, blurRadius: 0.5),],
+                                  boxShadow: const [BoxShadow(color:Colors.black, blurRadius: 0.5),],
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(6)),
                               child: Padding(
@@ -195,7 +195,7 @@ class _DataHistoryState extends State<DataHistory> {
                             // menu pulang
                             Container(
                               decoration: BoxDecoration(
-                                  boxShadow: [BoxShadow(color:Colors.black, blurRadius: 0.5),],
+                                  boxShadow: const [BoxShadow(color:Colors.black, blurRadius: 0.5),],
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(6)),
                               child: Padding(

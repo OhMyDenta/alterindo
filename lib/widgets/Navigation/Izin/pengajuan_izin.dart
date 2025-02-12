@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'dart:convert';
 import 'dart:developer';
@@ -54,15 +54,16 @@ class _PengajuanIzinState extends State<PengajuanIzin> {
 
   String nama = '';
   String jabatan = '';
+  String fotop = '';
 
   void fetchUserData() async {
     try {
       final response = await http.get(
         Uri.parse(
-          'https://alterindo.com/hris/api.php?action=login&id=${widget.nip}',
+          'https://www.mydeveloper.pro/hris/api.php?action=login&id=${widget.nip}',
         ),
         headers: {
-          'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+          'Authorization': 'Bearer 123456789',
         },
       );
       print('Status Code: ${response.statusCode}');
@@ -76,6 +77,7 @@ class _PengajuanIzinState extends State<PengajuanIzin> {
           setState(() {
             nama = json['Nama'] ?? 'User is Null';
             jabatan = json['Jabatan'] ?? 'Jabatan Is Null';
+            fotop = json['Foto'] ?? '';
           });
         } else {
           throw Exception('Empty data from API');
@@ -91,10 +93,10 @@ class _PengajuanIzinState extends State<PengajuanIzin> {
   Future<List<Pengajuan>> fetchHistoryData() async {
     final response = await http.get(
       Uri.parse(
-        'https://alterindo.com/hris/api.php?action=data_ijin',
+        'https://www.mydeveloper.pro/hris/api.php?action=data_ijin',
       ),
       headers: {
-        'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+        'Authorization': 'Bearer 123456789',
       },
     );
     if (response.statusCode == 200) {
@@ -183,7 +185,7 @@ class _PengajuanIzinState extends State<PengajuanIzin> {
                         child: Center(
                           child: Text(
                             'TIDAK',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
                             ),
                           ),
@@ -336,11 +338,11 @@ class _PengajuanIzinState extends State<PengajuanIzin> {
       });
 
       final response = await Dio().post(
-        'https://alterindo.com/hris/api.php?action=insert_ijin',
+        'https://www.mydeveloper.pro/hris/api.php?action=insert_ijin',
         data: formData,
         options: Options(
           headers: {
-            'Authorization': 'Bearer R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g',
+            'Authorization': 'Bearer 123456789',
           },
         ),
       );
@@ -383,7 +385,7 @@ Response Body: ${response.data}''');
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child: Text(
                   'Pilih Jenis Ijin',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -584,6 +586,7 @@ Response Body: ${response.data}''');
             ],
           ),
         ),
+        centerTitle: true,
         toolbarHeight: 70,
       ),
       body: Stack(
@@ -657,13 +660,19 @@ Response Body: ${response.data}''');
                                       decoration: const BoxDecoration(
                                         color: Colors.blue,
                                       ),
-                                      child: Center(
-                                        child: Text(
-                                          widget.nama[0],
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ),
+                                      child: fotop != null && fotop.isNotEmpty
+                                          ? ClipRRect(
+                                              child: Image.network(
+                                              fotop,
+                                              fit: BoxFit.cover,
+                                            ))
+                                          : Center(
+                                              child: Text(
+                                                widget.nama[0],
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
                                     )
                                   ],
                                 ),
@@ -917,7 +926,7 @@ Response Body: ${response.data}''');
             ),
           ),
           // tombol
-          
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8),
             child: Align(
@@ -963,7 +972,7 @@ Response Body: ${response.data}''');
               ),
             ),
           ),
-        const SizedBox(height: 40),
+          const SizedBox(height: 40),
         ],
       ),
     );
