@@ -129,7 +129,7 @@ class _AbsensiPagesState extends State<AbsensiPages> {
     }
     fetchAbsensData();
   } else {
-    throw Exception(response.body);
+    log(response.body);
   }
 }
 

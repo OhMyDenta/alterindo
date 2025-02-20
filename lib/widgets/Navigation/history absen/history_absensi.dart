@@ -22,9 +22,6 @@ class HistoryAbsensi extends StatefulWidget {
 
 class _HistoryAbsensiState extends State<HistoryAbsensi> {
   String _selectedOption = '';
-  
-
-
 
   int status = 3;
   // ////////////////////////////////menene
@@ -34,12 +31,38 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
   DateTime secondDate = DateTime(1945);
   bool refresh = false;
 
+  // String nama = '';
+  // String jabatan = '';
+  // String foto = '';
 
+  // void fetchUserData() async {
+  //   final response = await http.get(
+  //     Uri.parse(
+  //       'https://www.mydeveloper.pro/hris/api.php?action=data_karyawan&id=${widget.nip}',
+  //     ),
+  //     headers: {
+  //       'Authorization': 'Bearer 123456789',
+  //     },
+  //   );
+  //   print('Status Code: ${response.statusCode}');
+  //   print('Response Body: ${response.body}');
 
+  //   if (response.statusCode == 200) {
+  //     final Map<String, dynamic> json = jsonDecode(response.body);
+  //     print('Decoded JSON: $json');
+
+  //     setState(() {
+  //       nama = json['Nama'] ?? 'User is Null';
+  //       jabatan = json['Jabatan'] ?? 'Jabatan Is Null';
+  //       // foto = json['Foto'] ?? '';
+  //     });
+  //   } else {
+  //     throw Exception('Failed to load user data');
+  //   }
+  // }
 
   void getFirstDate() {
-    DateTime newDate =
-        DateTime(firstDate.year, firstDate.month, firstDate.day);
+    DateTime newDate = DateTime(firstDate.year, firstDate.month, firstDate.day);
     setState(() {
       lastDate = newDate;
     });
@@ -51,13 +74,14 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
     setState(() {
       dataHistory = fetchHistoryData();
       refresh = !refresh;
-    }); 
+    });
   }
 
   @override
   void initState() {
     super.initState();
     getFirstDate();
+    // fetchUserData();
     dataHistory = fetchHistoryData();
   }
 
@@ -122,24 +146,51 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
 
   // /////////////////////////////////////      //////////////////////////          /////
   Future<List<History>> fetchHistoryData() async {
-  final url = 'https://www.mydeveloper.pro/hris/api.php?action=data_absen_history&id=${widget.nip}&TanggalAwal=${DateFormat('yyyy-MM-dd').format(secondDate)}&TanggalAkhir=${DateFormat('yyyy-MM-dd').format(lastDate)}&status=$status';
+    final url =
+        'https://www.mydeveloper.pro/hris/api.php?action=data_absen_history&id=${widget.nip}&TanggalAwal=${DateFormat('yyyy-MM-dd').format(secondDate)}&TanggalAkhir=${DateFormat('yyyy-MM-dd').format(lastDate)}';
+    try {
+      final response = await http.get(Uri.parse(url), headers: {
+        'Authorization': 'Bearer 123456789',
+      });
 
-  try {
-    final response = await http.get(Uri.parse(url), headers: {
-      'Authorization': 'Bearer 123456789',
-    });
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
 
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonData = json.decode(response.body);
-      return jsonData.map((json) => History.fromJson(json)).toList();
-    } else {
-      throw Exception('Gagal mengambil data: ${response.statusCode}');
+        List<History> allData =
+            jsonData.map((json) => History.fromJson(json)).toList();
+
+        List<History> filteredData = allData.where((data) {
+          if (status == 3) return true;
+
+          if (data.keterangan == null ||
+              data.keterangan == 'Data Keterangan Null') {
+            return status == 4;
+          }
+          if (data.keterangan == 'Ijin Tidak Masuk') {
+            return status == 1;
+          }
+          if (data.keterangan == 'Alpha') {
+            return status == 2;
+          }
+          if (data.keterangan == 'Masuk') {
+            return status == 0;
+          }
+          if (data.keterangan == 'Libur') {
+            return status == 5;
+          }
+
+          return false;
+        }).toList();
+
+        return filteredData;
+      } else {
+        throw Exception('Gagal mengambil data: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+      rethrow;
     }
-  } catch (e) {
-    print('Error fetching data: $e');
-    rethrow;
   }
-}
 
   // tanggal manual
   void _showBottomSheet1(BuildContext context) {
@@ -250,9 +301,9 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
                                 children: [
                                   Text(
                                     lastDate != DateTime(3000)
-                                        ?  DateFormat('dd-MM-yyyy')
+                                        ? DateFormat('dd-MM-yyyy')
                                             .format(lastDate)
-                                        :'Pick Date',
+                                        : 'Pick Date',
                                     style: const TextStyle(
                                         fontSize: 16, color: Colors.grey),
                                   ),
@@ -368,7 +419,6 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
                                     dataHistory = fetchHistoryData();
                                   });
                                   Navigator.pop(context);
-                                  
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -400,7 +450,6 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
                                     dataHistory = fetchHistoryData();
                                   });
                                   Navigator.pop(context);
-                                  
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -433,7 +482,6 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
                                     dataHistory = fetchHistoryData();
                                   });
                                   Navigator.pop(context);
-                                  
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -466,7 +514,6 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
                                     dataHistory = fetchHistoryData();
                                   });
                                   Navigator.pop(context);
-                                  
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -536,222 +583,67 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
               topRight: Radius.circular(12),
             ),
           ),
-          padding: const EdgeInsets.all(16),
-          child: Stack(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
+              Row(
                 children: [
-                  // container 1
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: Row(
-                      children: [
-                        const Text('Pilih Jenis Absensi',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                            )),
-                        const Spacer(),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.close,
-                            size: 24,
-                            color: AppColors.secondary,
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Container(
-                    width: double.infinity,
-                    height: 1,
-                    decoration: const BoxDecoration(
-                      color: AppColors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  // container 2
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedOption = 'Semua Status';
-                              status = 3;
-                              dataHistory = fetchHistoryData();
-                            });
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 6),
-                            child: Container(
-                              decoration:
-                                  const BoxDecoration(color: Colors.white),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text('Semua Status'),
-                                    if (_selectedOption == 'Semua Status')
-                                      const Icon(Icons.check,
-                                          color: AppColors.secondary),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedOption = 'Masuk WFO';
-                              status = 0;
-                              dataHistory = fetchHistoryData();
-                            });
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 6),
-                            child: Container(
-                              decoration:
-                                  const BoxDecoration(color: Colors.white),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text('Masuk WFO'),
-                                    if (_selectedOption == 'Masuk WFO')
-                                      const Icon(Icons.check,
-                                          color: AppColors.secondary),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedOption = 'Izin Sakit/Tidak Masuk';
-                              status = 1;
-                              dataHistory = fetchHistoryData();
-                            });
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 6),
-                            child: Container(
-                              decoration:
-                                  const BoxDecoration(color: Colors.white),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text('Izin Sakit/Tidak Masuk'),
-                                    if (_selectedOption ==
-                                        'Izin Sakit/Tidak Masuk')
-                                      const Icon(Icons.check,
-                                          color: AppColors.secondary),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedOption = 'Alpha';
-                              status = 2;
-                              dataHistory = fetchHistoryData();
-                            });
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 6),
-                            child: Container(
-                              decoration:
-                                  const BoxDecoration(color: Colors.white),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text('Alpha'),
-                                    if (_selectedOption == 'Alpha')
-                                      const Icon(Icons.check,
-                                          color: AppColors.secondary),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedOption = 'Libur';
-                              status = 3;
-                              dataHistory = fetchHistoryData();
-                            });
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 6),
-                            child: Container(
-                              decoration:
-                                  const BoxDecoration(color: Colors.white),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text('Libur'),
-                                    if (_selectedOption == 'Libur')
-                                      const Icon(Icons.check,
-                                          color: AppColors.secondary),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                      ]),
-                    ),
+                  const Text('Pilih Jenis Absensi',
+                      style: TextStyle(fontSize: 20)),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.close,
+                        size: 24, color: AppColors.secondary),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               ),
+              const Divider(),
+              _buildStatusOption(context, 'Semua Status', 3),
+              _buildStatusOption(context, 'Masuk', 0),
+              _buildStatusOption(context, 'Izin', 1),
+              _buildStatusOption(context, 'Alpha', 2),
+              _buildStatusOption(context, 'Libur', 5),
+              _buildStatusOption(context, 'Data Keterangan Null', 4),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildStatusOption(BuildContext context, String label, int value) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedOption = label;
+          status = value;
+          dataHistory = fetchHistoryData();
+        });
+        Navigator.pop(context);
+      },
+      child: Container(
+        decoration: const BoxDecoration(color: Colors.white),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 6),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Text(label, style: const TextStyle(fontSize: 16)),
+              ),
+              const Divider(),
+              if (_selectedOption == label)
+                const Icon(Icons.check, color: AppColors.secondary),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -779,19 +671,15 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 30),
-              const Padding(
-                padding:
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    
-                  ],
-                ),
-              ),
-              // ListviewAbsen()
+              const SizedBox(height: 50),
+              // const Padding(
+              //   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              //   child: Column(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     mainAxisAlignment: MainAxisAlignment.start,
+              //     children: [],
+              //   ),
+              // ),
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: onRefresh,
@@ -799,16 +687,12 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
                     future: dataHistory,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
                         return const Center(
-                          child: Text(
-                            'Gagal Untuk Mengambil Data',
-                          ),
-                        );
-                      } else if (snapshot.hasData) {
+                            child: Text('Gagal Mengambil Data'));
+                      } else if (snapshot.hasData &&
+                          snapshot.data!.isNotEmpty) {
                         return ListView.builder(
                           itemCount: snapshot.data?.length,
                           itemBuilder: (context, index) {
@@ -821,17 +705,16 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
                               foto: data.foto,
                               nama: data.nama,
                               ketBawah: data.status == 1
-                                  ? '${data.keterangan} ${data.terlambat != '' ? data.terlambat : data.toleransi != '' ? data.toleransi : ''}'
+                                  ? '${data.keterangan} ${data.terlambat.isNotEmpty ? data.terlambat : data.toleransi.isNotEmpty ? data.toleransi : ''}'
                                   : data.keterangan,
                               shift: data.namaShift,
+                              nip: widget.nip,
                             );
                           },
                         );
                       } else {
                         return const Center(
-                          child: Text(
-                              'Tidak Ada Data Yang Ditemukan'), // Pesan jika tidak ada data.
-                        );
+                            child: Text('Tidak Ada Data Yang Ditemukan'));
                       }
                     },
                   ),
@@ -856,7 +739,7 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
                   },
                   child: const SizedBox(
                     child: Row(children: [
-                      Text('Semua Tanggal'),
+                      Text('Tanggal'),
                       Icon(Icons.keyboard_arrow_down)
                     ]),
                   ),
@@ -868,7 +751,7 @@ class _HistoryAbsensiState extends State<HistoryAbsensi> {
                   },
                   child: const SizedBox(
                     child: Row(children: [
-                      Text('Semua'),
+                      Text('Status'),
                       Icon(Icons.keyboard_arrow_down)
                     ]),
                   ),

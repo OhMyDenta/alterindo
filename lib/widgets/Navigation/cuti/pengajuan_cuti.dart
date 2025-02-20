@@ -18,7 +18,8 @@ import '../../../pages/bottom_notif_gagal.dart';
 
 class PengajuanCuti extends StatefulWidget {
   final String nip;
-  const PengajuanCuti({super.key, required this.nip});
+  final String nama;
+  const PengajuanCuti({super.key, required this.nip, required this.nama});
 
   @override
   State<PengajuanCuti> createState() => _PengajuanCutiState();
@@ -69,11 +70,11 @@ class _PengajuanCutiState extends State<PengajuanCuti> {
       final Map<String, dynamic> json = jsonDecode(response.body);
       print('Decoded JSON: $json');
 
-        setState(() {
-          nama = json['Nama'] ?? 'User is Null';
-          jabatan = json['Jabatan'] ?? 'Jabatan Is Null';
-        });
-      
+      setState(() {
+        nama = json['Nama'] ?? 'User is Null';
+        jabatan = json['Jabatan'] ?? 'Jabatan Is Null';
+        fotoP = json['Foto'] ?? '';
+      });
     } else {
       throw Exception('Failed to load user data');
     }
@@ -712,17 +713,24 @@ Response Body: ${response.data}''');
                                     ),
                                     Container(
                                       height: 80,
-                                      width: 80,
+                                      width: 70,
                                       decoration: const BoxDecoration(
                                         color: Colors.blue,
                                       ),
-                                      child: const Center(
-                                        child: Text(
-                                          'No Image',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    )
+                                      child: fotoP != null && fotoP.isNotEmpty
+                                          ? ClipRRect(
+                                              child: Image.network(
+                                              fotoP,
+                                              fit: BoxFit.cover,
+                                            ))
+                                          : Center(
+                                              child: Text(
+                                                widget.nama[0],
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                    ),
                                   ],
                                 ),
                               ),

@@ -54,23 +54,21 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     if (response.statusCode == 200) {
-      
-        Map<String, dynamic> data = jsonDecode(response.body);
-        String dataNip = data['NIP'] ?? '';
-        String dataDevice = data['Device'] ?? '';
-        setPref(dataNip, dataDevice);
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePages(
-                nip: dataNip,
-                device: dataDevice,
-              ),
+      Map<String, dynamic> data = jsonDecode(response.body);
+      String dataNip = data['NIP'] ?? '';
+      String dataDevice = data['Device'] ?? '';
+      setPref(dataNip, dataDevice);
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePages(
+              nip: dataNip,
+              device: dataDevice,
             ),
-          );
-        }
-      
+          ),
+        );
+      }
     } else {
       if (mounted) {
         _NextPage();
@@ -94,7 +92,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Spacer(),
                 Image.asset('assets/ci_off-close.png'),
                 const Spacer(),
-                const Text('Error'),
+                const Text('Error',
+                    style: TextStyle(color: AppColors.secondary, fontSize: 20)),
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text('masukan NIP atau Kode dengan benar'),
+                ),
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14.0),

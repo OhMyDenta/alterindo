@@ -7,7 +7,8 @@ import '../component/color.dart';
 
 class AbsenToday extends StatefulWidget {
   final String nip;
-  const AbsenToday({super.key, required this.nip});
+  final VoidCallback onRefresh;
+  const AbsenToday({super.key, required this.nip, required this.onRefresh});
 
   @override
   State<AbsenToday> createState() => _AbsenTodayState();
@@ -18,24 +19,31 @@ class _AbsenTodayState extends State<AbsenToday> {
   String? _absenTimePulang;
 
   void fetchAbsensData() async {
-    final response = await http.get(
-      Uri.parse(
-          'https://www.mydeveloper.pro/hris/api.php?action=data_absen&id=${widget.nip}'),
-      headers: {'Authorization': 'Bearer 123456789'},
-    );
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> json = jsonDecode(response.body);
-      setState(() {
-        _absenTimeMasuk = json['JamMasuk'] ?? '--:--:--';
-        _absenTimePulang = json['JamPulang'] ?? '--:--:--';
-      });
-    } else {
-      throw Exception('Failed to load user data');
-    }
+  final response = await http.get(
+    Uri.parse(
+        'https://www.mydeveloper.pro/hris/api.php?action=data_absen&id=${widget.nip}'),
+    headers: {'Authorization': 'Bearer 123456789'},
+  );
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> json = jsonDecode(response.body);
+    setState(() {
+      _absenTimeMasuk = json['JamMasuk'] ?? '--:--:--';
+      _absenTimePulang = json['JamPulang'] ?? '--:--:--';
+    });
+    widget.onRefresh();
+  } else {
+    throw Exception('Failed to load user data');
   }
+}
+
+
   @override
   void initState() {
     super.initState();
+    refreshdata();
+  }
+
+  void refreshdata() {
     fetchAbsensData();
   }
 
@@ -65,22 +73,22 @@ class _AbsenTodayState extends State<AbsenToday> {
                     ),
                   ),
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 2.0, horizontal: 8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Absend Datang'),
+                        const Text('Absend Datang'),
                         Row(
                           children: [
                             Text(
                               _absenTimeMasuk ?? '--:--:--',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: AppColors.three,
                               ),
                             ),
-                            SizedBox(width: 3),
-                            Text('WIB')
+                            const SizedBox(width: 3),
+                            const Text('WIB')
                           ],
                         ),
                       ],
@@ -113,22 +121,22 @@ class _AbsenTodayState extends State<AbsenToday> {
                     ),
                   ),
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 2.0, horizontal: 8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Absend Pulang'),
+                        const Text('Absend Pulang'),
                         Row(
                           children: [
                             Text(
                               _absenTimePulang ?? '--:--:--',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: AppColors.three,
                               ),
                             ),
-                            SizedBox(width: 3),
-                            Text('WIB')
+                            const SizedBox(width: 3),
+                            const Text('WIB')
                           ],
                         ),
                       ],

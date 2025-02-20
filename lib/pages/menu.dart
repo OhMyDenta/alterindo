@@ -160,7 +160,7 @@ class _MenuPagesState extends State<MenuPages> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => PengajuanCuti(nip: widget.nip,),
+                            builder: (context) => PengajuanCuti(nip: widget.nip, nama: nama,),
                           ),
                         );
                       },

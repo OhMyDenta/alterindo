@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../../component/color.dart';
 
 class DataHistory extends StatefulWidget {
+  final String nip;
   final String tanggal;
   final String keterangan;
   final String jamMasuk;
@@ -22,7 +23,8 @@ class DataHistory extends StatefulWidget {
       required this.ketBawah,
       required this.shift,
       required this.foto,
-      required this.nama});
+      required this.nama,
+      required this.nip});
 
   @override
   State<DataHistory> createState() => _DataHistoryState();
@@ -119,7 +121,10 @@ class _DataHistoryState extends State<DataHistory> {
                             // menu masuk
                             Container(
                               decoration: BoxDecoration(
-                                  boxShadow: const [BoxShadow(color:Colors.black, blurRadius: 0.5),],
+                                  boxShadow: const [
+                                    BoxShadow(
+                                        color: Colors.black, blurRadius: 0.5),
+                                  ],
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(6)),
                               child: Padding(
@@ -162,7 +167,10 @@ class _DataHistoryState extends State<DataHistory> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const Text('Absen Datang', style: TextStyle(color: Colors.black, fontSize: 14)),
+                                        const Text('Absen Datang',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14)),
                                         Row(
                                           children: [
                                             Text(
@@ -172,19 +180,21 @@ class _DataHistoryState extends State<DataHistory> {
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            
-                                             const Padding(
-                                               padding: EdgeInsets.symmetric(horizontal:6.0),
-                                               child: Text('WIB', style:  TextStyle(color: Colors.grey)),
-                                             ),
-                                            const Icon( Icons.sync_problem, color: Colors.red),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 6.0),
+                                              child: Text('WIB',
+                                                  style: TextStyle(
+                                                      color: Colors.grey)),
+                                            ),
+                                            const Icon(Icons.sync_problem,
+                                                color: Colors.red),
                                           ],
                                         ),
                                         const Text('Alterindo Software (Pusat)',
                                             style: TextStyle(
-                                              fontSize: 9.5,
-                                              color: AppColors.secondary
-                                            )),
+                                                fontSize: 9.5,
+                                                color: AppColors.secondary)),
                                       ],
                                     ),
                                   ],
@@ -195,7 +205,10 @@ class _DataHistoryState extends State<DataHistory> {
                             // menu pulang
                             Container(
                               decoration: BoxDecoration(
-                                  boxShadow: const [BoxShadow(color:Colors.black, blurRadius: 0.5),],
+                                  boxShadow: const [
+                                    BoxShadow(
+                                        color: Colors.black, blurRadius: 0.5),
+                                  ],
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(6)),
                               child: Padding(
@@ -238,21 +251,30 @@ class _DataHistoryState extends State<DataHistory> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const Text('Absen Pulang' , style: TextStyle(color: Colors.black, fontSize: 14)),
+                                        const Text('Absen Pulang',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14)),
                                         Row(
                                           children: [
                                             Text(
-                                              widget.jamPulang, 
+                                              widget.jamPulang,
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                             const Padding(
-                                              padding: EdgeInsets.symmetric(horizontal:6.0),
-                                              child: Text('WIB', style: TextStyle(color: Colors.grey)),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 6.0),
+                                              child: Text('WIB',
+                                                  style: TextStyle(
+                                                      color: Colors.grey)),
                                             ),
-                                            const Icon( Icons. check_circle_outline_outlined, color: Colors.green),
+                                            const Icon(
+                                                Icons
+                                                    .check_circle_outline_outlined,
+                                                color: Colors.green),
                                           ],
                                         ),
                                         const Text(

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 // import 'package:http/http.dart' as http;
 // import 'package:intl/intl.dart';
 
@@ -19,7 +20,8 @@ class DataHistoryIzin extends StatefulWidget {
   final String kodeUnik;
   final String foto;
   final String dokumen;
-   final Function onDelete;
+  final Function onDelete;
+  final Function onEdite;
 
   final String nama;
   const DataHistoryIzin({
@@ -35,7 +37,9 @@ class DataHistoryIzin extends StatefulWidget {
     required this.keteranganOtorisasi,
     required this.kodeUnik,
     required this.dokumen,
-    required this.nama, required this.onDelete,
+    required this.nama,
+    required this.onDelete,
+    required this.onEdite,
   });
 
   @override
@@ -237,21 +241,33 @@ class _DataHistoryIzinState extends State<DataHistoryIzin> {
                                   fontSize: 13, fontWeight: FontWeight.w600)),
                           const Spacer(),
                           if (widget.otorisasi == 0)
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () {
-                          widget.onDelete(); // Panggil fungsi hapus
-                        },
-                      ),
-                    ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: IconButton(
+                                icon:
+                                    const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () {
+                                  widget.onDelete();
+                                },
+                              ),
+                            ),
+                          if (widget.otorisasi == 0)
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: IconButton(
+                                icon: const Icon(Icons.edit,
+                                    color: Colors.yellow),
+                                onPressed: () {
+                                  widget.onEdite();
+                                },
+                              ),
+                            ),
                         ]),
                       ),
                       ListTile(
                         title: Text(widget.jenis),
                         subtitle: Text(widget.tanggal),
-                        
+
                         // trailing: widget.otorisasi ==
                         //         0 // Tombol hanya muncul jika status Pending
                         //     ? IconButton(

@@ -78,7 +78,7 @@ class _TimePagesState extends State<TimePages> {
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AbsenToday(nip: widget.nip,)
+                  AbsenToday(nip: widget.nip, onRefresh: () => setState(() {}),)
                 ],
               ),
             ],

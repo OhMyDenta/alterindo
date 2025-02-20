@@ -30,36 +30,37 @@ class _HomePagesState extends State<HomePages> {
   String jabatan = '';
 
   void getUserData() async {
-
-      final response = await http.get(
-        Uri.parse(
-          'https://www.mydeveloper.pro/hris/api.php?action=data_karyawan&id=${widget.nip}',
-        ),
-        headers: {
-          'Authorization': 'Bearer 123456789',
-        },
-      );
-      if (response.statusCode == 200) {
-        final List<dynamic> json = jsonDecode(response.body);
-        setState(() {
-          nama = json[0]['Nama'] ?? 'Gagal Mengambil User';
-          jabatan = json[0]['Jabatan'] ?? '';
-          foto = json[0]['Foto'] ?? '';
-        });
-      } else {
-        throw Exception('Failed Load User Data');
-      }
-  }
-Future<void> checkLoginStatus() async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool status = prefs.getBool('status') ?? false;
-  if (!status) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    final response = await http.get(
+      Uri.parse(
+        'https://www.mydeveloper.pro/hris/api.php?action=data_karyawan&id=${widget.nip}',
+      ),
+      headers: {
+        'Authorization': 'Bearer 123456789',
+      },
     );
+    if (response.statusCode == 200) {
+      final List<dynamic> json = jsonDecode(response.body);
+      setState(() {
+        nama = json[0]['Nama'] ?? 'Gagal Mengambil User';
+        jabatan = json[0]['Jabatan'] ?? '';
+        foto = json[0]['Foto'] ?? '';
+      });
+    } else {
+      throw Exception('Failed Load User Data');
+    }
   }
-}
+
+  Future<void> checkLoginStatus() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool status = prefs.getBool('status') ?? false;
+    if (!status) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -86,7 +87,7 @@ Future<void> checkLoginStatus() async {
                       device: widget.device,
                     ),
                     const SizedBox(height: 20),
-                    Kalendar(nip : widget.nip),
+                    Kalendar(nip: widget.nip),
                     const SizedBox(height: 20),
                     const SizedBox(height: 20),
                     const SizedBox(height: 50),
@@ -174,12 +175,16 @@ Future<void> checkLoginStatus() async {
                       ],
                     ),
                     const Spacer(),
-                    InkWell(
-                      onTap: (){
-                        MaterialPageRoute(builder: (context) => ProfilePages(nip: widget.nip,));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          MaterialPageRoute(
+                            builder: (context) => ProfilePages(
+                              nip: widget.nip,
+                            ),
+                          );
+                        },
                         child: Container(
                           height: 60,
                           width: 60,
@@ -187,27 +192,36 @@ Future<void> checkLoginStatus() async {
                             shape: BoxShape.circle,
                             color: Colors.blue,
                           ),
-                          child: foto.isEmpty
-                              ? Center(
-                                  child: Text(
-                                    nama.isEmpty ? '' : nama[0],
-                                    style: const TextStyle(
-                                      color: Colors.white,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfilePages(nip: widget.nip)));
+                            },
+                            child: foto.isEmpty
+                                ? Center(
+                                      child: Text(
+                                        nama.isEmpty ? '' : nama[0],
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    )
+                                  
+                                : ClipOval(
+                                    child: Image.memory(
+                                      base64Decode(foto),
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                )
-                              : ClipOval(
-                                  child: Image.memory(
-                                    base64Decode(foto),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                                  
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                TimePages(nip: widget.nip,),
+                TimePages(
+                  nip: widget.nip,
+                ),
               ],
             ),
           ), //padding batas

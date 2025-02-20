@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:alterindo/pages/belum.dart';
 import 'package:alterindo/widgets/Navigation/history_cuti/component/data_history_cuti.dart';
 import 'package:alterindo/widgets/Navigation/history_cuti/component/detail_cuti_page.dart';
 import '../../../setting/class_history_cuti.dart';
@@ -740,6 +743,109 @@ class _HistoryCutiPagesState extends State<HistoryCutiPages> {
   }
 
 // R8pZ5kL7QwX3J0aH2cT9vFm4Yn6bV1g
+
+// edit delete
+  void _confirmDelete(
+    BuildContext context,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Konfirmasi"),
+        content: const Text("Apakah Anda yakin ingin menghapus pengajuan ini?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Batal"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _deleteIzin();
+            },
+            child: const Text("Hapus", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _deleteIzin() async {
+    final response = await http.delete(
+      Uri.parse(
+          'https://www.mydeveloper.pro/hris/api.php?action=delete_cuti&Kode=${widget.nip}'),
+      headers: {'Authorization': 'Bearer 123456789'},
+    );
+    if (response.statusCode == 200) {
+      sBelum(context);
+      setState(() {
+        dataHistoryCuti = fetchHistoryData();
+      });
+    } else {
+      sBelum(context);
+    }
+  }
+
+  void _edit(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          width: double.infinity,
+          decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(12),
+                topLeft: Radius.circular(12),
+              )),
+          padding: const EdgeInsets.all(16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+            child: Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.dangerous_outlined,
+                      color: Colors.red,
+                      size: 40,
+                    ),
+                    const SizedBox(height: 10),
+                    const Text('Akan Segera Hadir',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 22)),
+                    const SizedBox(height: 8),
+                    const Text('Fiture Masih dalam progres',
+                        style: TextStyle(color: Colors.red, fontSize: 12)),
+                    const SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 6.0, horizontal: 14),
+                            child: Text('OK',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                )),
+                          )),
+                    )
+                  ]),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -865,7 +971,7 @@ class _HistoryCutiPagesState extends State<HistoryCutiPages> {
                               foto: data.foto,
                               dokumen: data.dokumen,
                               nama: nama,
-                              tanggalAwal: data.tanggalAkhir,
+                              tanggalAwal: data.tanggalAkhir, onDelete: (){_confirmDelete(context);}, onEdite: (){_edit(context);},
                             ),
                           ),
                         );
