@@ -40,6 +40,19 @@ class _DetailCutiPageState extends State<DetailCutiPage> {
   bool showPdf = false;
 
   @override
+void initState() {
+  super.initState();
+  if (widget.foto.isNotEmpty && widget.pdf.isEmpty) {
+    showPdf = false;
+  } else if (widget.pdf.isNotEmpty && widget.foto.isEmpty) {
+    showPdf = true;
+  } else {
+    showPdf = false; 
+  }
+}
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColors.background,
@@ -298,7 +311,8 @@ class _DetailCutiPageState extends State<DetailCutiPage> {
                                   width: 315,
                                   color: Colors.white,
                                   child: SingleChildScrollView(
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     child: Column(
                                       children: [
                                         // Header
@@ -309,9 +323,12 @@ class _DetailCutiPageState extends State<DetailCutiPage> {
                                               color: AppColors.secondary,
                                               height: 50,
                                               child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 18.0),
                                                 child: Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Center(
                                                       child: Text(
@@ -320,7 +337,8 @@ class _DetailCutiPageState extends State<DetailCutiPage> {
                                                             : 'Foto',
                                                         style: const TextStyle(
                                                           color: Colors.white,
-                                                          fontWeight: FontWeight.bold,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
                                                       ),
                                                     ),
@@ -329,55 +347,39 @@ class _DetailCutiPageState extends State<DetailCutiPage> {
                                               ),
                                             ),
                                             Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                // Tombol toggle antara PDF dan Foto
-                                                if (widget.pdf.isNotEmpty)
-                                                  IconButton(
-                                                    onPressed: () {
-                                                      setState(
-                                                          () => showPdf = true);
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.picture_as_pdf,
-                                                      color: showPdf
-                                                          ? Colors.white
-                                                          : Colors.grey,
-                                                    ),
-                                                  ),
-                                                if (widget.foto.isNotEmpty)
-                                                  IconButton(
-                                                    onPressed: () {
-                                                      setState(() =>
-                                                          showPdf = false);
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.image,
-                                                      color: !showPdf
-                                                          ? Colors.white
-                                                          : Colors.grey,
-                                                    ),
-                                                  ),
-                                                // Tombol untuk memperbesar atau memperkecil container
-                                                IconButton(
-                                                  onPressed: () {
-                                                    setState(
-                                                        () => photoS = !photoS);
-                                                  },
-                                                  icon: photoS
-                                                      ? const Icon(
-                                                          Icons
-                                                              .keyboard_arrow_up,
-                                                          color: Colors.white,
-                                                        )
-                                                      : const Icon(
-                                                          Icons
-                                                              .keyboard_arrow_down,
-                                                          color: Colors.white,
-                                                        ),
-                                                ),
-                                              ],
-                                            ),
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    if (widget.pdf.isNotEmpty && widget.foto.isNotEmpty) ...[
+      IconButton(
+        onPressed: () {
+          setState(() => showPdf = true);
+        },
+        icon: Icon(
+          Icons.picture_as_pdf,
+          color: showPdf ? Colors.white : Colors.grey,
+        ),
+      ),
+      IconButton(
+        onPressed: () {
+          setState(() => showPdf = false);
+        },
+        icon: Icon(
+          Icons.image,
+          color: !showPdf ? Colors.white : Colors.grey,
+        ),
+      ),
+    ],
+    IconButton(
+      onPressed: () {
+        setState(() => photoS = !photoS);
+      },
+      icon: photoS
+          ? const Icon(Icons.keyboard_arrow_up, color: Colors.white)
+          : const Icon(Icons.keyboard_arrow_down, color: Colors.white),
+    ),
+  ],
+),
+
                                           ],
                                         ),
 
@@ -411,7 +413,8 @@ class _DetailCutiPageState extends State<DetailCutiPage> {
                                                         Icon(
                                                             Icons
                                                                 .picture_as_pdf,
-                                                            size: 30, color: Colors.red),
+                                                            size: 30,
+                                                            color: Colors.red),
                                                         SizedBox(width: 10),
                                                         Text(
                                                           'Show Pdf File',
@@ -444,5 +447,4 @@ class _DetailCutiPageState extends State<DetailCutiPage> {
           ),
         ));
   }
-
 }

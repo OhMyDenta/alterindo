@@ -40,6 +40,18 @@ class _DetailIzinPageState extends State<DetailIzinPage> {
   bool photoS = false;
   bool showPdf = false;
 
+  @override
+void initState() {
+  super.initState();
+  if (widget.foto.isNotEmpty && widget.pdf.isEmpty) {
+    showPdf = false;
+  } else if (widget.pdf.isNotEmpty && widget.foto.isEmpty) {
+    showPdf = true;
+  } else {
+    showPdf = false; 
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -331,56 +343,39 @@ class _DetailIzinPageState extends State<DetailIzinPage> {
                                                 ),
                                               ),
                                             ),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                // Tombol toggle antara PDF dan Foto
-                                                if (widget.pdf.isNotEmpty)
-                                                  IconButton(
-                                                    onPressed: () {
-                                                      setState(
-                                                          () => showPdf = true);
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.picture_as_pdf,
-                                                      color: showPdf
-                                                          ? Colors.white
-                                                          : Colors.grey,
-                                                    ),
-                                                  ),
-                                                if (widget.foto.isNotEmpty)
-                                                  IconButton(
-                                                    onPressed: () {
-                                                      setState(() =>
-                                                          showPdf = false);
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.image,
-                                                      color: !showPdf
-                                                          ? Colors.white
-                                                          : Colors.grey,
-                                                    ),
-                                                  ),
-                                                // Tombol untuk memperbesar atau memperkecil container
-                                                IconButton(
-                                                  onPressed: () {
-                                                    setState(
-                                                        () => photoS = !photoS);
-                                                  },
-                                                  icon: photoS
-                                                      ? const Icon(
-                                                          Icons
-                                                              .keyboard_arrow_up,
-                                                          color: Colors.white,
-                                                        )
-                                                      : const Icon(
-                                                          Icons
-                                                              .keyboard_arrow_down,
-                                                          color: Colors.white,
-                                                        ),
-                                                ),
-                                              ],
-                                            ),
+                                          Row(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    if (widget.pdf.isNotEmpty && widget.foto.isNotEmpty) ...[
+      IconButton(
+        onPressed: () {
+          setState(() => showPdf = true);
+        },
+        icon: Icon(
+          Icons.picture_as_pdf,
+          color: showPdf ? Colors.white : Colors.grey,
+        ),
+      ),
+      IconButton(
+        onPressed: () {
+          setState(() => showPdf = false);
+        },
+        icon: Icon(
+          Icons.image,
+          color: !showPdf ? Colors.white : Colors.grey,
+        ),
+      ),
+    ],
+    IconButton(
+      onPressed: () {
+        setState(() => photoS = !photoS);
+      },
+      icon: photoS
+          ? const Icon(Icons.keyboard_arrow_up, color: Colors.white)
+          : const Icon(Icons.keyboard_arrow_down, color: Colors.white),
+    ),
+  ],
+),
                                           ],
                                         ),
 

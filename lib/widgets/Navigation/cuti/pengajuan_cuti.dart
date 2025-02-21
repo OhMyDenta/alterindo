@@ -1064,7 +1064,7 @@ Response Body: ${response.data}''');
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'AJUKAN IZIN',
+                        'AJUKAN CUTI',
                         // textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.white,
